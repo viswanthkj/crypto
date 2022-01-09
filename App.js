@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View, StyleSheet } from 'react-native';
+import { FlatList, Text, View, StyleSheet, SafeAreaView } from 'react-native';
 import { DataTable } from 'react-native-paper';
 
 
 const App = () => {
-  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [webSocketData, setWebSocketData] = useState({})
   var ws = React.useRef(new WebSocket('wss://production-esocket.delta.exchange')).current;
@@ -15,11 +14,10 @@ const App = () => {
       .then((json) => {
         if(json && json.result) {
           const data = json.result
-=          setData(data)
+          setData(data)
         }
       })
       .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
       const symbolArray= data.map((item) => item.underlying_asset.symbol)
       let uniqueChars = symbolArray.filter((c, index) => {
         return symbolArray.indexOf(c) === index;
@@ -46,7 +44,7 @@ const App = () => {
   },[data,webSocketData]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <DataTable>
         <DataTable.Header style={styles.headStyle}>
         <View style={styles.cellContainer}>
@@ -95,7 +93,7 @@ const App = () => {
               }
           />
       </DataTable>
-    </View>
+    </SafeAreaView>
   );
 };
 
